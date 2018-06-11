@@ -328,6 +328,7 @@ class KDiff3App : public QSplitter
    KDiff3Part*        m_pKDiff3Part;
    KParts::MainWindow*       m_pKDiff3Shell;
    bool m_bAutoFlag;
+   bool m_bAutoSilentFlag;
    bool m_bAutoMode;
    void recalcWordWrap(int nofVisibleColumns=-1);
    bool m_bRecalcWordWrapPosted;

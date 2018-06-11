@@ -206,6 +206,7 @@ int main(int argc, char *argv[])
    options.add( "o" ).add( "output file", ki18n("Output file. Implies -m. E.g.: -o newfile.txt"));
    options.add( "out file",    ki18n("Output file, again. (For compatibility with certain tools.)") );
    options.add( "auto",        ki18n("No GUI if all conflicts are auto-solvable. (Needs -o file)") );
+   options.add( "autosilent",  ki18n("Implies -auto, NO GUI, returns error code (-2) if conflicts are unsolvable."));
    options.add( "qall",        ki18n("Don't solve conflicts automatically.") );
    options.add( "L1 alias1",   ki18n("Visible name replacement for input file 1 (base).") );
    options.add( "L2 alias2",   ki18n("Visible name replacement for input file 2.") );

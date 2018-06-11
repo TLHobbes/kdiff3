@@ -224,7 +224,8 @@ KDiff3App::KDiff3App(QWidget* pParent, const char* /*name*/, KDiff3Part* pKDiff3
          m_outputFilename = FileAccess( m_outputFilename, true ).absoluteFilePath();
    }
 
-   m_bAutoFlag = args!=0  && args->isSet("auto");
+   m_bAutoSilentFlag = args!=0 && args->isSet("autosilent");
+   m_bAutoFlag = m_bAutoSilentFlag || (args!=0 && args->isSet("auto"));
    m_bAutoMode = m_bAutoFlag || m_pOptions->m_bAutoSaveAndQuitOnMergeWithoutConflicts;
    if ( m_bAutoMode && m_outputFilename.isEmpty() )
    {
@@ -416,14 +417,33 @@ void KDiff3App::completeInit( const QString& fn1, const QString& fn2, const QStr
             }
 
             bSuccess = pSD->saveNormalDataAs( m_outputFilename );
-            if ( bSuccess ) ::exit(0);
-            else KMessageBox::error( this, i18n("Saving failed.") );
+			if (bSuccess)
+			{
+				::exit(0);
+			}
+			else
+			{
+				if ( m_bAutoSilentFlag )
+				{
+					fprintf(stderr, "Failed to save auto merged binary file!");
+					::exit(-1);
+				}
+				else
+				{
+					KMessageBox::error(this, i18n("Saving failed."));
+				}
+			}
          }
          else if ( m_pMergeResultWindow->getNrOfUnsolvedConflicts() == 0 )
          {
             bool bSuccess = m_pMergeResultWindow->saveDocument( m_pMergeResultWindowTitle->getFileName(), m_pMergeResultWindowTitle->getEncoding(), m_pMergeResultWindowTitle->getLineEndStyle() );
             if ( bSuccess ) ::exit(0);
          }
+		 else if ( m_bAutoSilentFlag )
+		 {
+			 fprintf(stdout, "Could not auto merge due to (%d) unsolved conflict(s) - silently exiting without GUI.\n", m_pMergeResultWindow->getNrOfUnsolvedConflicts());
+			 ::exit(-2);
+		 }
       }
    }
    m_bAutoMode = false;
