@@ -1588,7 +1588,10 @@ void KDiff3App::postRecalcWordWrap()
 
 void KDiff3App::slotRecalcWordWrap()
 {
-   recalcWordWrap();
+   if ( ! m_bAutoMode )
+   {
+	   recalcWordWrap();
+   }
 }
 
 // visibleTextWidthForPrinting is >=0 only for printing, otherwise the really visible width is used
